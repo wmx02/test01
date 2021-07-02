@@ -1,0 +1,73 @@
+html,body,#viewDiv {
+				padding: 0;
+				margin: 0;
+				height: 95%;
+				width: 100%;
+			}
+#titleview{
+	text-align: center;
+	background-color: #000033;
+	height:12%;
+	width:100%;
+	padding: 0;
+	margin: 0;
+	font-family: "楷体";
+	font-size:60px;
+	color:blue;
+}		
+#LayerBox{
+	position: absolute;
+	top: 300px;
+	left: 10px;
+	width: 230px;
+	height: 200px;
+	margin: 5px;
+	background-size: 100%;
+	background-color: #CCCC66;
+	opacity: 0.8;
+	z-index: 9;
+
+	border-style:solid;
+	border-color:#ff0000 #00ff00 #0000ff rgb(250,0,255);
+	border-radius:5px ;
+	text-align: center;
+	font-family: "微软雅黑";
+}
+
+.button_Add{
+	margin-left: 5px;
+	float: left;
+	background-color: red;
+	border-style:solid;
+	border-color:#ff0000 #00ff00 #0000ff rgb(250,0,255);
+	color: lightgreen;
+	border-radius:5px ;
+	height: 20px;
+	width: 20px;
+	opacity: 0.8;
+}
+
+.button_Remove{
+	margin-left: 5px;
+	float: left;
+	position:initial;
+	background-color: red;
+	border-style:solid;
+	border-color:#ff0000 #00ff00 #0000ff rgb(250,0,255);
+	color: lightgreen;
+	border-radius:5px ;
+	height: 20px;
+	width: 20px;
+	opacity: 0.8;
+}
+
+#SingleBox{
+float: left;
+margin-top: 10px;
+margin-left: 10px;
+}
+
+
+#Layers{
+	color: dimgray;
+}
