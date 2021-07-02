@@ -1,0 +1,197 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>全国省会城市降雨量变化图</title>
+		<h1 id="titleview">全国省会城市降雨量图</h1>
+    <link rel="stylesheet" href="css/css01.css" />
+    <link rel="stylesheet" href="css/css02.css" />
+	<link rel="stylesheet" href="css/css03.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+    <!---<link rel="stylesheet" href="css/css_menu.css" />---->
+    <script src="https://js.arcgis.com/4.10/"></script>
+
+    <script>
+        require([
+            "esri/config",
+            "esri/Map",
+            "esri/views/MapView",
+			"esri/layers/FeatureLayer",
+			"esri/layers/MapImageLayer",
+            "esri/layers/TileLayer",
+			"esri/widgets/Legend"
+        ],
+            function (
+                esriConfig,
+                Map,
+                MapView,
+				FLayer,
+				ImageLayer,
+                TLayer,
+				Legend) {
+
+                esriConfig.apiKey = "AAPK56e3ac027f044c4089d8ceec232fc05dYaOuzVRzm8tMRqvzOvDvIEevbqJ85yppn9PacU6cy4duurJrVK9wo_8BcWO8i8bi";
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                const map = new Map({
+                    basemap: "hybrid" // Basemap layer service
+                });
+
+                const view_gis2018 = new MapView({
+                    map: map,
+                    center: [114.3, 30.5], // Longitude, latitude
+                    zoom: 5, // Zoom level
+                    container: "viewDiv01" // Div element
+                });
+
+                document.getElementById("basemap01").addEventListener("click", function () {
+                    map.basemap = "oceans";
+                });
+
+                document.getElementById("basemap02").addEventListener("click", function () {
+                    map.basemap = "hybrid";
+                });
+
+                document.getElementById("basemap03").addEventListener("click", function () {
+                    map.basemap = "terrain";
+                });	
+                document.getElementById("basemap04").addEventListener("click", function () {
+                    map.basemap = "streets";
+                });
+				
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------------
+
+                //*** 添加DIV用于显示坐标等信息 ***//
+                var coordsWidget = document.createElement("div");
+                coordsWidget.id = "coordsWidget";
+                coordsWidget.className = "esri-widget esri-component";
+                coordsWidget.style.padding = "7px 15px 5px";
+                view_gis2018.ui.add(coordsWidget, "bottom-left");
+
+                //***显示经纬度、比例尺大小和尺度***//
+                function showCoordinates(pt) {
+                    var coords = "纬度： " + pt.latitude.toFixed(3) + "， 经度： " + pt.longitude.toFixed(3) +
+                        " | 比例尺 1:" + Math.round(view_gis2018.scale * 1) / 1 +
+                        " | 缩放： " + view_gis2018.zoom;
+                    coordsWidget.innerHTML = coords;
+                }
+
+                //*** 添加事件显示中心的坐标（在视图停止移动之后） ***//
+                view_gis2018.watch(["stationary"], function () {
+                    showCoordinates(view_gis2018.center);
+                });
+
+                //*** 添加显示鼠标的坐标点***//
+                view_gis2018.on(["pointer-down", "pointer-move"], function (evt) {
+                    showCoordinates(view_gis2018.toMap({ x: evt.x, y: evt.y }));
+                });
+
+                //-------------------------------------------------------------------------------------------
+				const di = new FLayer({
+					portalItem: {
+						id: "cbe4ee70af4a4b54a3221997c3f53800"
+					},
+				});
+				//var legend = new Legend({
+				//	view: view_gis2018,
+				//	layerInfos: [{
+				//		layer: di,
+				//		title: "全国地图"
+				//	}]
+				//});
+				//map.add(di)
+				const rain1 = new FLayer({
+					portalItem: {
+						id: "df26f7e6f81d4d98ae21d01395342618"
+					},
+				});
+				var legend1 = new Legend({
+					view: view_gis2018,
+					layerInfos: [{
+						layer: rain1,
+						title: "全国年降雨2020"
+					}]
+				});
+				const rain2 = new FLayer({
+					portalItem: {
+						id: "8dd7dce251d64f71bd38fe10fe6a52f7"
+					},
+				});
+				var legend2 = new Legend({
+					view: view_gis2018,
+					layerInfos: [{
+						layer: rain2,
+						title: "全国正常年降雨"
+					}]
+				});
+				view_gis2018.ui.add(legend1, "bottom-right");	
+				document.getElementById("AddLayer_1").addEventListener("click", function () {
+                    map.add(rain1);
+                });
+				view_gis2018.ui.add(legend2, "bottom-right");	
+				document.getElementById("AddLayer_2").addEventListener("click", function () {
+                    map.add(rain2);
+                });
+				document.getElementById("AddLayer_3").addEventListener("click", function () {
+                    map.add(di);
+                });
+//-----------------------------------------------------------------------------------------------------------
+                document.getElementById("RemoveLayer_1").addEventListener("click", function () {
+                    view_gis2018.map.remove(rain1);
+                });
+				document.getElementById("RemoveLayer_2").addEventListener("click", function () {
+                    view_gis2018.map.remove(rain2);
+                });
+				document.getElementById("RemoveLayer_3").addEventListener("click", function () {
+                    view_gis2018.map.remove(di);
+                });
+			});
+//-----------------------------------------------------------------------------------------------------------
+    </script>
+
+</head>
+
+<body>
+    <!---------------------------------------------------------------------------------------------------------------------------------->
+	<div id="viewDiv01"></div>
+    <!------------------------------------------------------------------------------------------------------------------------------------>
+    <div id="popdiv_write">
+        <div id="write_output">
+			<div>切换底图</div>
+            <div id="basemap01" class="basemap"><span>oceans</span></div>
+            <div id="basemap02" class="basemap"><span>hybrid</span></div>
+            <div id="basemap03" class="basemap"><span>terrain</span></div>
+            <div id="basemap04" class="basemap"><span>streets</span></div>
+        </div>
+    </div>
+
+    <!------------------------------------------------------------------------------------------------------------------------------------>
+    <div id="LayerBox">
+        <p>添加/删除图层</p>
+		<div id="SingleBox">
+            <a>&nbsp;&nbsp;全国年降雨2020</a>
+            <div id="AddLayer_1" class="button_Add">A</div>
+            <div id="RemoveLayer_1" class="button_Remove">D</div>
+        </div>
+		<div id="SingleBox">
+            <a>&nbsp;&nbsp;全国正常年降雨</a>
+            <div id="AddLayer_2" class="button_Add">A</div>
+            <div id="RemoveLayer_2" class="button_Remove">D</div>
+        </div>
+		<div id="SingleBox">
+            <a>&nbsp;&nbsp;行政区</a>
+            <div id="AddLayer_3" class="button_Add">A</div>
+            <div id="RemoveLayer_3" class="button_Remove">D</div>
+        </div>
+        <div id="Layers">
+        </div>
+        
+
+    </div>
+</body>
+
+</html>
